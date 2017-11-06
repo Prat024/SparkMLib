@@ -1,0 +1,109 @@
+Lab 13e - Spark Mlib
+
+1) Enter Spark
+
+spark-shell
+
+2) Numpy installation (another terminal)
+
+sudo yum install numpy scipy
+
+3) Make directory
+
+mkdir mllib
+cd mllib
+
+4) Git clone into this directory
+
+git clone https://github.com/databricks/spark-training.git
+
+5) Go into movie directory
+
+cd spark-training/machine-learning/
+python bin/rateMovies
+
+6) Get summary of the ratings
+
+vi python/MovieLensALS.py
+
+7) Insert python code for summary of ratings
+
+    #Lets open the MovieLensALS.py and add below code into the script to get a summary of the ratings.
+    numRatings = ratings.count()
+    numUsers = ratings.values().map(lambda r: r[0]).distinct().count()
+    numMovies = ratings.values().map(lambda r: r[1]).distinct().count()
+    print "Got %d ratings from %d users on %d movies." % (numRatings, numUsers, numMovies)
+
+8) Move datafile into HDFS
+
+hadoop	 fs -put -f ../data/movielens/medium /user/cloudera
+
+9) Execute program in local mode
+
+cd hadoop
+spark-submit --driver-memory 2g MovieLensALS.py /user/cloudera/medium ../personalRatings.txt
+
+# Output
+Got 1000209 ratings from 6040 users on 3706 movies.
+
+10) Run recommedation engine
+
+cd /home/cloudera/mllib/spark-training/machine-learning/python/solution/
+spark-submit --driver-memory 2g MovieLensALS.py /user/cloudera/medium ../../personalRatings.txt
+
+# Output
+The best model was trained with rank = 12 and lambda = 0.1, and numIter = 20, and its RMSE on the test set is 0.868661.
+.....
+The best model improves the baseline by 21.99%.
+.....
+Movies recommended for you:
+ 1: Welcome to Woop-Woop (1997)
+ 2: Six-String Samurai (1998)
+ 3: Chushingura (1962)
+ 4: First Love, Last Rites (1997)
+ 5: Hard Core Logo (1996)
+ 6: Perfect Blue (1997)
+ 7: Bandits (1997)
+ 8: Cure, The (1995)
+ 9: Love Serenade (1996)
+10: Fifth Element, The (1997)
+11: Police Story 4: Project S (Chao ji ji hua) (1993)
+12: Mr. Nice Guy (1997)
+13: Leather Jacket Love Story (1997)
+14: Wallace & Gromit: The Best of Aardman Animation (1996)
+15: Jackie Chan's First Strike (1996)
+16: Specials, The (2000)
+17: Faraway, So Close (In Weiter Ferne, So Nah!) (1993)
+18: Dear Diary (Caro Diario) (1994)
+19: Galaxy Quest (1999)
+20: After Life (1998)
+21: Princess Mononoke, The (Mononoke Hime) (1997)
+22: Close Shave, A (1995)
+23: Oxygen (1999)
+24: Wrong Trousers, The (1993)
+25: Trouble in Paradise (1932)
+26: Drunken Master (Zui quan) (1979)
+27: City, The (1998)
+28: Hard-Boiled (Lashou shentan) (1992)
+29: Princess Bride, The (1987)
+30: Quatermass and the Pit (1967)
+31: Operation Condor 2 (Longxiong hudi) (1990)
+32: Mummy, The (1999)
+33: Matrix, The (1999)
+34: Persuasion (1995)
+35: SLC Punk! (1998)
+36: Fear of a Black Hat (1993)
+37: FairyTale: A True Story (1997)
+38: Henry V (1989)
+39: Matilda (1996)
+40: Othello (1995)
+41: No Looking Back (1998)
+42: Bringing Up Baby (1938)
+43: Head Above Water (1996)
+44: Lodger, The (1926)
+45: Careful (1992)
+46: Splendor (1999)
+47: Operation Condor (Feiying gaiwak) (1990)
+48: Shanghai Noon (2000)
+49: Taming of the Shrew, The (1967)
+50: Bewegte Mann, Der (1994)
